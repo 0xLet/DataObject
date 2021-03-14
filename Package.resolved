@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "SURL",
+        "repositoryURL": "https://github.com/0xLeif/SURL",
+        "state": {
+          "branch": null,
+          "revision": "2ad0e8a6b097334e9317b7e6ec94c701d946861f",
+          "version": "0.1.0"
+        }
+      },
+      {
+        "package": "WTV",
+        "repositoryURL": "https://github.com/0xLeif/WTV",
+        "state": {
+          "branch": null,
+          "revision": "8eefc65bf823eb7612047dbd2df4c6c73864c500",
+          "version": "0.1.1"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
