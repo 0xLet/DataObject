@@ -1,7 +1,8 @@
 import Foundation
+import SwiftFu
 
 @dynamicMemberLookup
-public class DataObject {
+public class DataObject: FuableClass {
     public enum ObjectVariable: String, Hashable {
         case value
         case child
