@@ -66,6 +66,7 @@ public class DataObject: FuableClass {
     private init(data: Data) {
         defer {
             variables[ObjectVariable.json] = String(data: data, encoding: .utf8)
+            add(value: data)
         }
         if let json = try? JSONSerialization.jsonObject(with: data,
                                                         options: .allowFragments) as? [Any] {
@@ -77,7 +78,6 @@ public class DataObject: FuableClass {
             return
         }
         consume(DataObject(json))
-        add(value: data)
     }
 }
 
