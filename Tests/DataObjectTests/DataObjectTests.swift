@@ -17,8 +17,8 @@ final class DataObjectTests: XCTestCase {
     
     func testBasicInit() {
         let obj = DataObject("init_value")
-            .add(variable: "SomeValue", value: "qwerty")
-            .add(variable: "nil", value: nil)
+            .set(variable: "SomeValue", value: "qwerty")
+            .set(variable: "nil", value: nil)
         
         XCTAssertEqual(obj.value(), "init_value")
         XCTAssertEqual(obj.SomeValue.value(), "qwerty")
@@ -27,7 +27,7 @@ final class DataObjectTests: XCTestCase {
     
     func testObjectInit() {
         let obj = DataObject("init_value") { o in
-            o.add(variable: "SomeObject", value: DataObject("qwerty"))
+            o.set(variable: "SomeObject", value: DataObject("qwerty"))
         }
         
         XCTAssertEqual(obj.value(), "init_value")
@@ -36,7 +36,7 @@ final class DataObjectTests: XCTestCase {
     
     func testObjectConsumeInit() {
         let obj = DataObject(DataObject("init_value")) { o in
-            o.add(variable: 3.14, value: "pi")
+            o.set(variable: 3.14, value: "pi")
         }
         
         XCTAssertEqual(obj.value(), "init_value")
@@ -44,20 +44,24 @@ final class DataObjectTests: XCTestCase {
     
     func testComplexInit() {
         let innerObject = DataObject("init_value") { o in
-            o.add(variable: "SomeValue", value: "qwerty")
-            o.add(variable: 3.14, value: "pi")
+            o.set(variable: "SomeValue", value: "qwerty")
+            o.set(variable: 3.14, value: "pi")
         }
         
         let otherObject = DataObject("other_value") { o in
-            o.add(variable: "SomeOtherValue", value: "otherqwerty")
-            o.add(variable: 3.14, value: 3.14)
+            o.set(variable: "SomeOtherValue", value: "otherqwerty")
+            o.set(variable: 3.14, value: 3.14)
         }
         
         let obj = DataObject { p in
-            p.add(childObject: innerObject)
+            p.set(childObject: innerObject)
         }
         
-        innerObject.add(childObject: otherObject)
+        innerObject.set(childObject: otherObject)
+        
+        otherObject.set(childObject: DataObject())
+        
+        print(obj)
         
         XCTAssertEqual(obj.value(as: DataObject.self)?.description, DataObject().description)
         XCTAssertEqual(obj.child.value(), "init_value")
@@ -164,8 +168,8 @@ final class DataObjectTests: XCTestCase {
             .forEach {
                 empty.consume($0)
             }
-        obj.add(childObject: empty)
-        obj.add(array: arrayObj.array)
+        obj.set(childObject: empty)
+        obj.set(array: arrayObj.array)
         
         XCTAssertEqual(obj.id.value(), 10)
         XCTAssertNotEqual(obj.id.value(), smObj.id.value() ?? -1)
@@ -275,33 +279,6 @@ final class DataObjectTests: XCTestCase {
         XCTAssertEqual(emptyObject, DataObject("This should modify!"))
     }
     
-    func testHashableSet() {
-        var objDict = [DataObject: DataObject]()
-        
-        let someObjectValue = DataObject("Some Value")
-        let someOtherObject = DataObject(someObjectValue)
-        let someObjectKey = DataObject("Some Key")
-        let emptyObject = DataObject()
-        
-        someObjectValue.set { (value: String) in
-            nil
-        }
-        
-        someOtherObject.set { _ in
-            "Hello World!"
-        }
-        
-        emptyObject.set { _ in "This should not set!" }
-        
-        objDict[someObjectKey] = someObjectValue
-        
-        XCTAssertEqual(objDict[someObjectKey], DataObject())
-        XCTAssertEqual(someOtherObject.value(), "Hello World!")
-        XCTAssertNil(someObjectValue.variables["_value"])
-        XCTAssertEqual(emptyObject, DataObject())
-        XCTAssertNotEqual(emptyObject, DataObject("This should not set!"))
-    }
-    
     func testHashableUpdate() {
         var objDict = [DataObject: DataObject]()
         
@@ -344,7 +321,6 @@ final class DataObjectTests: XCTestCase {
         ("testDive", testDive),
         ("testHashable", testHashable),
         ("testHashableModify", testHashableModify),
-        ("testHashableSet", testHashableSet),
         ("testHashableUpdate", testHashableUpdate)
     ]
 }

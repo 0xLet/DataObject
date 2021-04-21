@@ -16,9 +16,9 @@ public extension URL {
             .dataTask(
                 withHandler: { (data, response, error) in
                     handler(DataObject()
-                                .add(variable: "data", value: data)
-                                .add(variable: "response", value: response)
-                                .add(variable: "error", value: error))
+                                .set(variable: "data", value: data)
+                                .set(variable: "response", value: response)
+                                .set(variable: "error", value: error))
                 }
             )
             .resume()
@@ -31,8 +31,8 @@ public extension URL {
             .dataTask(
                 withHandler: { (_, response, error) in
                     handler(DataObject()
-                                .add(variable: "response", value: response)
-                                .add(variable: "error", value: error))
+                                .set(variable: "response", value: response)
+                                .set(variable: "error", value: error))
                 }
             )
             .resume()
@@ -45,9 +45,9 @@ public extension URL {
             .dataTask(
                 withHandler: { (data, response, error) in
                     handler(DataObject()
-                                .add(variable: "data", value: data)
-                                .add(variable: "response", value: response)
-                                .add(variable: "error", value: error))
+                                .set(variable: "data", value: data)
+                                .set(variable: "response", value: response)
+                                .set(variable: "error", value: error))
                 }
             )
             .resume()
@@ -60,9 +60,9 @@ public extension URL {
             .dataTask(
                 withHandler: { (data, response, error) in
                     handler(DataObject()
-                                .add(variable: "data", value: data)
-                                .add(variable: "response", value: response)
-                                .add(variable: "error", value: error))
+                                .set(variable: "data", value: data)
+                                .set(variable: "response", value: response)
+                                .set(variable: "error", value: error))
                 }
             )
             .resume()
@@ -75,8 +75,8 @@ public extension URL {
             .dataTask(
                 withHandler: { (data, response, error) in
                     handler(DataObject()
-                                .add(variable: "response", value: response)
-                                .add(variable: "error", value: error))
+                                .set(variable: "response", value: response)
+                                .set(variable: "error", value: error))
                 }
             )
             .resume()
@@ -94,9 +94,9 @@ public extension URL {
             .dataTask(
                 withHandler: { (data, response, error) in
                     handler(DataObject()
-                                .add(variable: "data", value: data)
-                                .add(variable: "response", value: response)
-                                .add(variable: "error", value: error))
+                                .set(variable: "data", value: data)
+                                .set(variable: "response", value: response)
+                                .set(variable: "error", value: error))
                 }
             )
             .resume()
@@ -114,8 +114,8 @@ public extension URL {
             .dataTask(
                 withHandler: { (data, response, error) in
                     handler(DataObject()
-                                .add(variable: "response", value: response)
-                                .add(variable: "error", value: error))
+                                .set(variable: "response", value: response)
+                                .set(variable: "error", value: error))
                 }
             )
             .resume()
@@ -133,9 +133,9 @@ public extension URL {
             .dataTask(
                 withHandler: { (data, response, error) in
                     handler(DataObject()
-                                .add(variable: "data", value: data)
-                                .add(variable: "response", value: response)
-                                .add(variable: "error", value: error))
+                                .set(variable: "data", value: data)
+                                .set(variable: "response", value: response)
+                                .set(variable: "error", value: error))
                 }
             )
             .resume()
@@ -153,9 +153,9 @@ public extension URL {
             .dataTask(
                 withHandler: { (data, response, error) in
                     handler(DataObject()
-                                .add(variable: "data", value: data)
-                                .add(variable: "response", value: response)
-                                .add(variable: "error", value: error))
+                                .set(variable: "data", value: data)
+                                .set(variable: "response", value: response)
+                                .set(variable: "error", value: error))
                 }
             )
             .resume()

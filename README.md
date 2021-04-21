@@ -5,8 +5,8 @@
 ## Basic Example
 ```swift
 let obj = DataObject("init_value")
-    .add(variable: "SomeValue", value: "qwerty")
-    .add(variable: "nil", value: nil)
+    .set(variable: "SomeValue", value: "qwerty")
+    .set(variable: "nil", value: nil)
 
 XCTAssertEqual(obj.value(), "init_value")
 XCTAssertEqual(obj.SomeValue.value(), "qwerty")
