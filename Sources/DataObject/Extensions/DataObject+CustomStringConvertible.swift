@@ -7,22 +7,27 @@
 
 extension DataObject: CustomStringConvertible {
     public var description: String {
-        var varDescription: String? = "|\tVariables\n"
-        
-        if variables.isEmpty {
-            varDescription = nil
-        } else {
-            varDescription? += variables
+        """
+        DataObject {
+        \(
+            variables
                 .map { (key, value) in
                     guard let object = value as? DataObject else {
                         return "|\t* \(key): \(value) (\(type(of: value)))"
                     }
                     
-                    return "|\t \(key): DataObject {\n\(object.description.split(separator: "\n").map { "|\t \($0)" }.dropFirst().joined(separator: "\n"))"
+                    let values = object.description.split(separator: "\n")
+                        .dropFirst()
+                    
+                    if values.dropLast().isEmpty {
+                        return "|\t* \(key): DataObject { }"
+                    }
+                    
+                    return "|\t* \(key): DataObject {\n\(values.map { "|\t \($0)" }.joined(separator: "\n"))"
                 }
                 .joined(separator: "\n")
+        )
         }
-        
-        return ["DataObject {", varDescription, "}"].compactMap { $0 }.joined(separator: "\n")
+        """
     }
 }
