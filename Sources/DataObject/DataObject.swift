@@ -85,26 +85,6 @@ public class DataObject: FuableClass {
 
 
 public extension DataObject {
-    var all: [AnyHashable: DataObject] {
-        var allVariables = [AnyHashable: DataObject]()
-        
-        variables.forEach { key, value in
-            print("Key: \(key) = \(value)")
-            let uKey = ((key as? String) == "") ? UUID().uuidString : key
-            if let objects = value as? [DataObject] {
-                allVariables[uKey] = DataObject(array: objects)
-                return
-            }
-            guard let object = value as? DataObject else {
-                allVariables[uKey] = DataObject(value)
-                return
-            }
-            allVariables[uKey] = DataObject(dictionary: object.all)
-        }
-        
-        return allVariables
-    }
-    
     var array: [DataObject] {
         if let array = variables[ObjectVariable.array] as? [Data] {
             return array.map { DataObject(data: $0) }
