@@ -47,16 +47,14 @@ public class DataObject: FuableClass {
         } else if let data = unwrappedValue as? Data {
             consume(DataObject(data: data))
         } else {
-            consume(DataObject {
-                $0.add(value: unwrappedValue)
-            })
+            consume(DataObject().set(value: unwrappedValue))
         }
     }
     
     // MARK: private init
     
     private init(array: [Any]) {
-        add(variable: ObjectVariable.array, value: array.map {
+        set(variable: ObjectVariable.array, value: array.map {
             DataObject($0)
         })
     }
@@ -65,12 +63,12 @@ public class DataObject: FuableClass {
     }
     private init(data: Data) {
         defer {
-            variables[ObjectVariable.json] = String(data: data, encoding: .utf8)
-            add(value: data)
+            set(variable: ObjectVariable.json, value: String(data: data, encoding: .utf8))
+            set(value: data)
         }
         if let json = try? JSONSerialization.jsonObject(with: data,
                                                         options: .allowFragments) as? [Any] {
-            add(variable: ObjectVariable.array, value: json)
+            set(variable: ObjectVariable.array, value: json)
             return
         }
         guard let json = try? JSONSerialization.jsonObject(with: data,
@@ -85,26 +83,6 @@ public class DataObject: FuableClass {
 
 
 public extension DataObject {
-    var all: [AnyHashable: DataObject] {
-        var allVariables = [AnyHashable: DataObject]()
-        
-        variables.forEach { key, value in
-            print("Key: \(key) = \(value)")
-            let uKey = ((key as? String) == "") ? UUID().uuidString : key
-            if let objects = value as? [DataObject] {
-                allVariables[uKey] = DataObject(array: objects)
-                return
-            }
-            guard let object = value as? DataObject else {
-                allVariables[uKey] = DataObject(value)
-                return
-            }
-            allVariables[uKey] = DataObject(dictionary: object.all)
-        }
-        
-        return allVariables
-    }
-    
     var array: [DataObject] {
         if let array = variables[ObjectVariable.array] as? [Data] {
             return array.map { DataObject(data: $0) }
@@ -146,9 +124,9 @@ public extension DataObject {
         }
         return object
     }
-    /// Add a Value with a name to the current object
+    /// Set a named Value to the current object
     @discardableResult
-    func add(variable named: AnyHashable = ObjectVariable.value, value: Any?) -> Self {
+    func set(variable named: AnyHashable = ObjectVariable.value, value: Any?) -> Self {
         guard let value = value,
               (unwrap(value) as? NSNull) == nil else {
             return self
@@ -171,17 +149,6 @@ public extension DataObject {
         
         return self
     }
-    /// Set a Value with a name to the current object
-    @discardableResult
-    func set<T>(variable named: AnyHashable = ObjectVariable.value, modifier: (T) -> T?) -> Self {
-        guard let variable = variables[named],
-              let value = variable as? T else {
-            return self
-        }
-        variables[named] = modifier(value)
-        
-        return self
-    }
     /// Update a Value with a name to the current object
     @discardableResult
     func update<T>(variable named: AnyHashable = ObjectVariable.value, modifier: (T) -> T) -> Self {
@@ -193,16 +160,16 @@ public extension DataObject {
         
         return self
     }
-    /// Add a ChildObject with a name of `_object` to the current object
+    /// Set the ChildObject with a name of `_object` to the current object
     @discardableResult
-    func add(childObject object: DataObject) -> Self {
+    func set(childObject object: DataObject) -> Self {
         variables[ObjectVariable.child] = object
         
         return self
     }
-    /// Add an Array with a name of `_array` to the current object
+    /// Set the Array with a name of `_array` to the current object
     @discardableResult
-    func add(array: [Any]) -> Self {
+    func set(array: [Any]) -> Self {
         variables[ObjectVariable.array] = array
         
         return self
@@ -218,7 +185,7 @@ public extension DataObject {
     @discardableResult
     func consume(_ object: DataObject) -> DataObject {
         object.variables.forEach { (key, value) in
-            self.add(variable: key, value: value)
+            self.set(variable: key, value: value)
         }
         
         return self
